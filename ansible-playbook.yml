@@ -1,0 +1,38 @@
+---
+- hosts: all
+  tasks:
+
+    - name: Install prerequisite packages
+      command: sudo apt-get install -y apt-transport-https
+
+    - name: Install prerequisite packages if not already installed
+      command: sudo apt-get install -y software-properties-common wget
+
+    - name: Download Grafana package
+      get_url:
+        url: https://dl.grafana.com/oss/release/grafana-10.4.1.linux-amd64.tar.gz
+        dest: /home/ubuntu/grafana.tar.gz
+        mode: '0644'
+
+    - name: Unpack Grafana package
+      unarchive:
+        src: /home/ubuntu/grafana.tar.gz
+        dest: /home/ubuntu/
+        remote_src: yes
+        extra_opts: [--strip-components=1]
+
+    - name: Start Grafana server
+      command: /home/ubuntu/bin/grafana-server --config=/home/ubuntu/conf/defaults.ini
+
+    - name: Stop existing Grafana service
+      systemd:
+        name: grafana-server
+        state: stopped
+
+    - name: Replace existing Grafana installation with new version
+      command: cp -R /home/ubuntu/* /usr/share/grafana/
+
+    - name: Start Grafana server
+      systemd:
+        name: grafana-server
+        state: started
