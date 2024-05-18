@@ -16,7 +16,14 @@ pipeline {
         stage('Docker Push') {
             steps {
                 //Logging into vault
-                withVault(configuration: [disableChildPoliciesOverride: false, timeout: 60, vaultCredentialId: 'vault-jenkins-role', vaultUrl: 'http://51.20.137.56:8200'], vaultSecrets: [[path: 'secrets/creds/my-secret-text', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
+                withVault(
+                    configuration: [
+                        disableChildPoliciesOverride: false, 
+                        timeout: 60, 
+                        vaultCredentialId: 'vault-jenkins-role', 
+                        vaultUrl: 'http://51.20.192.151:8200'], 
+                        vaultSecrets: [
+                            [path: 'secrets/creds/my-secret-text', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
                     sh 'docker login -u $username -p $password'
                 }
                 sh "docker push bossmanjerry/vault-images:${env.BUILD_NUMBER}"
@@ -31,10 +38,10 @@ pipeline {
                             disableChildPoliciesOverride: false,
                             timeout: 60,
                             vaultCredentialId: 'vault-jenkins-role',
-                            vaultUrl: 'http://51.20.137.56:8200'
+                            vaultUrl: 'http://51.20.192.151:8200'
                         ],
                         vaultSecrets: [
-                            [path: 'secrets/creds/my-secret-text', secretValues: [[vaultKey: 'username2'], [vaultKey: 'password2']]]
+                            [path: 'secrets/creds/my-secret-text', secretValues: [[vaultKey: 'github_username2'], [vaultKey: 'github_password2']]]
                         ]
                     ) {
                         // Configure Git
@@ -47,7 +54,7 @@ pipeline {
                         // Add, commit, and push changes to GitHub
                         sh "git add ."
                         sh "git commit -m 'Changed github manifest file: ${env.BUILD_NUMBER}'"
-                        sh 'git push https://$password2@github.com/$username2/install-grafana-usx-ansible.git HEAD:main'
+                        sh 'git push https://$github_password2@github.com/$github_username2/install-grafana-usx-ansible.git HEAD:main'
                     }
                 }
             }
