@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        kubernetes_server_private_ip = credentials('kubernetes_server_private_ip')
+    }
 
     stages {
         stage('gitclone') {
@@ -21,7 +24,7 @@ pipeline {
                         disableChildPoliciesOverride: false, 
                         timeout: 60, 
                         vaultCredentialId: 'vault-jenkins-role', 
-                        vaultUrl: 'http://51.20.192.151:8200'], 
+                        vaultUrl: 'http://13.60.91.83:8200'], 
                         vaultSecrets: [
                             [path: 'secrets/creds/my-secret-text', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
                     sh 'docker login -u $username -p $password'
@@ -38,10 +41,10 @@ pipeline {
                             disableChildPoliciesOverride: false,
                             timeout: 60,
                             vaultCredentialId: 'vault-jenkins-role',
-                            vaultUrl: 'http://51.20.192.151:8200'
+                            vaultUrl: 'http://13.60.91.83:8200'
                         ],
                         vaultSecrets: [
-                            [path: 'secrets/creds/my-secret-text', secretValues: [[vaultKey: 'github_username2'], [vaultKey: 'github_password2']]]
+                            [path: 'secrets/creds/my-secret-text', secretValues: [[vaultKey: 'github_username'], [vaultKey: 'github_password']]]
                         ]
                     ) {
                         // Configure Git
@@ -54,10 +57,11 @@ pipeline {
                         // Add, commit, and push changes to GitHub
                         sh "git add ."
                         sh "git commit -m 'Changed github manifest file: ${env.BUILD_NUMBER}'"
-                        sh 'git push https://$github_password2@github.com/$github_username2/install-grafana-usx-ansible.git HEAD:main'
+                        sh 'git push https://$github_password@github.com/$github_username/install-grafana-usx-ansible.git HEAD:main'
                     }
                 }
             }
+            
         }
         
     }
