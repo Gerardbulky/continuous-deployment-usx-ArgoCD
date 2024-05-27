@@ -18,7 +18,7 @@ spec:
         app: vault-images
     spec:
       containers:
-      - image: bossmanjerry/vault-images:102
+      - image: bossmanjerry/vault-images:103
         name: vault-images
         resources: {}
 status: {}
