@@ -1,6 +1,6 @@
 ---
 - name: Deploy Vault App using ArgoCD
-  hosts: localhost
+  hosts: all
   tasks:
     - name: Download vault-app.yaml
       get_url:
