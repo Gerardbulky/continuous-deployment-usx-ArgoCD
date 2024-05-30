@@ -1,40 +1,21 @@
----
-- name: Deploy Vault App using ArgoCD
-  hosts: all
+# playbook.yml
+- name: Apply Argo CD Application
+  hosts: localhost
+  become: true
+  become_user: root
   tasks:
-    - name: Download vault-app.yaml
-      get_url:
-        url: 'https://aadf32b4e4c04461199aa9297f64072c-917314181.eu-north-1.elb.amazonaws.com/vault-app.yaml'
-        dest: '/tmp/vault-app.yaml'
-    
-    - name: Apply vault-app.yaml to ArgoCD
-      command: kubectl apply -f /tmp/vault-app.yaml
-      register: result
+    - name: Ensure kubectl is installed
+      command: kubectl version --client
+      register: kubectl_installed
+      ignore_errors: true
 
-    - name: Show the result
-      debug:
-        var: result
+    - name: Install kubectl if not present
+      package:
+        name: kubectl
+        state: present
+      when: kubectl_installed.failed
 
-
-
-# # playbook.yml
-# - name: Apply Argo CD Application
-#   hosts: localhost
-#   become: true
-#   become_user: root
-#   tasks:
-#     - name: Ensure kubectl is installed
-#       command: kubectl version --client
-#       register: kubectl_installed
-#       ignore_errors: true
-
-#     - name: Install kubectl if not present
-#       package:
-#         name: kubectl
-#         state: present
-#       when: kubectl_installed.failed
-
-#     - name: Apply Argo CD Application YAML
-#       kubernetes.core.k8s:
-#         state: present
-#         definition: "{{ lookup('file', 'application.yaml') }}"
+    - name: Apply Argo CD Application YAML
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('file', 'application.yaml') }}"
