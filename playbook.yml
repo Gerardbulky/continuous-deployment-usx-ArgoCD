@@ -1,6 +1,6 @@
 # playbook.yml
 - name: Apply Argo CD Application
-  hosts: localhost
+  hosts: all
   become: true
   become_user: root
   tasks:
