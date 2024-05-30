@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: my-app
+  name: vault-app
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/Gerardbulky/install-grafana-usx-ansible.git
     targetRevision: HEAD
-    path: .  # Update this to the correct path if needed
+    path: ./  # Update this to the correct path if needed
   destination:
     server: https://kubernetes.default.svc
     namespace: default  # Ensure this is the namespace where you want to deploy
