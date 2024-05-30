@@ -1,21 +1,14 @@
-# playbook.yml
-- name: Apply Argo CD Application
+---
+- name: Deploy Application using ArgoCD
   hosts: localhost
-  become: true
-  become_user: root
+  become: yes
   tasks:
-    - name: Ensure kubectl is installed
-      command: kubectl version --client
-      register: kubectl_installed
-      ignore_errors: true
-
-    - name: Install kubectl if not present
-      package:
-        name: kubectl
-        state: present
-      when: kubectl_installed.failed
-
-    - name: Apply Argo CD Application YAML
-      kubernetes.core.k8s:
-        state: present
-        definition: "{{ lookup('file', 'application.yaml') }}"
+    - name: Create Application
+      command: >
+        argocd app create my-app
+        --repo=https://github.com/your/repo
+        --path=my-app
+        --dest-server=https://kubernetes.default.svc
+        --dest-namespace=default
+        --revision=HEAD
+        --auto-sync
