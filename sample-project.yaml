@@ -6,9 +6,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/abhishek67parmar/argo-app.git
+    repoURL: https://github.com/Gerardbulky/install-grafana-usx-ansible.git
     targetRevision: HEAD
-    path: app-config
+    path: ./
   destination:
     server: https://kubernetes.default.svc
     namespace: my-argo-app
