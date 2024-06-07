@@ -26,9 +26,6 @@ status: {}
 apiVersion: v1
 kind: Service
 metadata:
-  namespace: default
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
   name: lb-service
   labels:
     app: lb-service
