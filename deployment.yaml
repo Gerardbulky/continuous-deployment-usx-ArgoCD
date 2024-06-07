@@ -36,3 +36,6 @@ spec:
     targetPort: 5000
   selector:
     app: vault-images
+status:
+  loadBalancer:
+    ingress: []
