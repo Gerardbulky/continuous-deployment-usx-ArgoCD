@@ -24,7 +24,7 @@ pipeline {
                         disableChildPoliciesOverride: false, 
                         timeout: 60, 
                         vaultCredentialId: 'vault-jenkins-role', 
-                        vaultUrl: 'http://13.60.91.83:8200'], 
+                        vaultUrl: 'http://51.20.76.240:8200'], 
                         vaultSecrets: [
                             [path: 'secrets/creds/my-secret-text', secretValues: [[vaultKey: 'username'], [vaultKey: 'password']]]]) {
                     sh 'docker login -u $username -p $password'
@@ -41,7 +41,7 @@ pipeline {
                             disableChildPoliciesOverride: false,
                             timeout: 60,
                             vaultCredentialId: 'vault-jenkins-role',
-                            vaultUrl: 'http://13.60.91.83:8200'
+                            vaultUrl: 'http://51.20.76.240:8200'
                         ],
                         vaultSecrets: [
                             [path: 'secrets/creds/my-secret-text', secretValues: [[vaultKey: 'github_username'], [vaultKey: 'github_password']]]
